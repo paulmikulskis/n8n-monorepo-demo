@@ -1,0 +1,75 @@
+{
+  "name": "n8nodes",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "author": {
+    "name": "Paul Mikulskis",
+    "email": "mikulskisp@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build:install": "pnpm build  && pnpm run local-install",
+    "build": "rm -rf dist && webpack --config webpack.config.cjs && gulp build:icons --gulpfile ./gulpfile.cjs",
+    "local-install": "npm link && cd ~/.n8n/custom && npm link n8nodes",
+    "deploy": "cd ../.. && fly deploy . --config apps/n8nodes/fly.toml --dockerfile apps/flows/Dockerfile",
+    "dev": "pnpm run build && n8n start",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/ExampleCredentialsApi.credentials.js",
+      "dist/credentials/HttpBinApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/ExampleNode/ExampleNode.node.js",
+      "dist/nodes/HttpBin/HttpBin.node.js",
+      "dist/nodes/SendDiscordMessage/SendDiscordMessage.node.js",
+      "dist/nodes/DiscordMessageListener/DiscordMessageListener.node.js",
+      "dist/nodes/RandomNumberGenerator/RandomNumberGenerator.node.js"
+    ]
+  },
+  "dependencies": {
+    "@ape-analytics/services": "workspace:^0.1.0",
+    "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^12.0.2",
+    "discord.js": "^14.14.1",
+    "terser-webpack-plugin": "^5.3.10"
+  },
+  "devDependencies": {
+    "@ape-analytics/eslint-config": "workspace:^0.2.0",
+    "@ape-analytics/prettier-config": "workspace:^0.1.0",
+    "@ape-analytics/tsconfig": "workspace:^0.1.0",
+    "@babel/cli": "^7.24.5",
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@types/express": "^4.17.6",
+    "@types/request-promise-native": "~1.0.15",
+    "@typescript-eslint/parser": "^7.2.0",
+    "eslint-plugin-n8n-nodes-base": "^1.11.0",
+    "gulp": "^4.0.2",
+    "n8n-core": "*",
+    "n8n-workflow": "*",
+    "prettier": "^3.2.5",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -1,0 +1,49 @@
+# fly.toml app configuration file generated for ape-flows on 2024-04-30T23:14:54-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+app = 'ape-flows'
+primary_region = 'bos'
+kill_signal = 'SIGINT'
+kill_timeout = '5s'
+
+[build]
+dockerfile = 'Dockerfile'
+
+[[mounts]]
+source = 'n8n_data'
+destination = '/root/.n8n'
+
+[http_service]
+internal_port = 5678
+force_https = true
+auto_stop_machines = false
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
+
+[[services]]
+min_machines_running = 1
+protocol = 'tcp'
+internal_port = 5678
+
+[[services.ports]]
+port = 80
+handlers = ['http']
+
+[[services.ports]]
+port = 443
+handlers = ['tls', 'http']
+
+[services.concurrency]
+hard_limit = 25
+soft_limit = 20
+
+[[services.tcp_checks]]
+interval = '10s'
+timeout = '2s'
+
+[[vm]]
+memory = '2gb'
+cpu_kind = 'shared'
+cpus = 1

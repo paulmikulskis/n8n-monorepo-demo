@@ -1,0 +1,4 @@
+{
+  "extends": "@ape-analytics/tsconfig/base.json",
+  "include": ["routes"]
+}
